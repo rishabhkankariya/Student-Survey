@@ -170,7 +170,7 @@ function SurveyContent() {
     }
 
     return (
-        <main className="min-h-screen bg-transparent text-white p-4 md:p-16 pb-32 relative overflow-hidden">
+        <main className="min-h-screen bg-transparent text-white p-0 md:p-16 pb-32 relative overflow-hidden">
 
             <div className="max-w-4xl mx-auto pt-10">
                 <ProgressBar currentLevel={currentStep} totalLevels={SURVEY_STEPS.length} />
@@ -209,7 +209,7 @@ function SurveyContent() {
                                             <p className="text-sm text-slate-500">Have you ever missed a teacher because of this?</p>
                                         </div>
                                     </div>
-                                    <div className="flex gap-4 w-full md:w-auto">
+                                    <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
                                         <button onClick={() => updateField('missed_work', true)} className={`flex-1 md:px-8 py-4 rounded-xl font-black border transition-all ${formData.missed_work === true ? 'bg-emerald-500 border-emerald-500 text-white' : 'glass border-white/10 text-slate-500'}`}>YES</button>
                                         <button onClick={() => updateField('missed_work', false)} className={`flex-1 md:px-8 py-4 rounded-xl font-black border transition-all ${formData.missed_work === false ? 'bg-slate-700 border-slate-600 text-white' : 'glass border-white/10 text-slate-500'}`}>NO</button>
                                     </div>
@@ -268,7 +268,7 @@ function SurveyContent() {
                                             <p className="text-sm text-slate-500">Is it hard to keep track of when teachers are free?</p>
                                         </div>
                                     </div>
-                                    <div className="flex gap-4">
+                                    <div className="flex flex-col sm:flex-row gap-4">
                                         <button onClick={() => updateField('schedule_tracking_difficult', true)} className={`flex-1 py-6 rounded-xl font-black border transition-all ${formData.schedule_tracking_difficult === true ? 'bg-emerald-500 border-emerald-500 text-white' : 'glass border-white/10 text-slate-500'}`}>YES, IT'S HARD</button>
                                         <button onClick={() => updateField('schedule_tracking_difficult', false)} className={`flex-1 py-6 rounded-xl font-black border transition-all ${formData.schedule_tracking_difficult === false ? 'bg-emerald-500 border-emerald-500 text-white' : 'glass border-white/10 text-slate-500'}`}>NO, IT'S EASY</button>
                                     </div>
@@ -359,7 +359,7 @@ function SurveyContent() {
                                             <p className="text-slate-500 font-medium">Would you like notifications for teacher arrivals?</p>
                                         </div>
                                     </div>
-                                    <div className="flex gap-4 w-full md:w-auto">
+                                    <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
                                         <button onClick={() => updateField('notification_useful', true)} className={`flex-1 md:px-10 py-5 rounded-xl font-black border transition-all ${formData.notification_useful === true ? 'bg-emerald-500 border-emerald-500 text-white' : 'glass border-white/10 text-slate-500'}`}>YES</button>
                                         <button onClick={() => updateField('notification_useful', false)} className={`flex-1 md:px-10 py-5 rounded-xl font-black border transition-all ${formData.notification_useful === false ? 'bg-slate-700 border-slate-600 text-white' : 'glass border-white/10 text-slate-500'}`}>NO</button>
                                     </div>

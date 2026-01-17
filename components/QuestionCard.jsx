@@ -11,7 +11,7 @@ export default function QuestionCard({ children, title, description, badge }) {
             initial="initial"
             animate="animate"
             exit="exit"
-            className="glass-card p-12 md:p-20 relative overflow-hidden group !bg-black"
+            className="glass-card p-6 md:p-20 relative overflow-hidden group !bg-black"
         >
             {/* Architectural Grid Accent */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '100px 100px' }}></div>

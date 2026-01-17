@@ -12,7 +12,7 @@ export default function EmojiRating({ value, onChange }) {
     ];
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 py-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 py-8 md:py-12">
             {options.map((opt, index) => {
                 const isActive = value === index + 1;
                 return (
@@ -21,9 +21,9 @@ export default function EmojiRating({ value, onChange }) {
                         whileHover={{ y: -10 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={(e) => onChange(index + 1, e)}
-                        className={`relative group flex flex-col items-center justify-center p-12 rounded-[2.5rem] border transition-all duration-500 ${isActive
-                                ? 'bg-white/5 border-emerald-500/50 shadow-[0_0_50px_-10px_rgba(16,185,129,0.2)]'
-                                : 'bg-white/[0.02] border-white/5 hover:border-white/20'
+                        className={`relative group flex flex-col items-center justify-center p-6 md:p-12 rounded-[1.5rem] md:rounded-[2.5rem] border transition-all duration-500 ${isActive
+                            ? 'bg-white/5 border-emerald-500/50 shadow-[0_0_50px_-10px_rgba(16,185,129,0.2)]'
+                            : 'bg-white/[0.02] border-white/5 hover:border-white/20'
                             }`}
                     >
                         <div className={`mb-6 transition-all duration-500 ${isActive ? 'scale-125' : 'opacity-40 grayscale group-hover:opacity-100 group-hover:grayscale-0'}`} style={{ color: isActive ? opt.color : 'white' }}>
