@@ -43,6 +43,12 @@ const SURVEY_STEPS = [
         badge: "Step 5: Notifications",
         title: "Get Updates 🏰",
         description: "Would you like to receive phone alerts when a teacher is available?",
+    },
+    {
+        id: 6,
+        badge: "Step 6: Your Ideas",
+        title: "Your Ideas & Suggestions 🧠",
+        description: "Share your honest thoughts to help us build a smarter campus.",
     }
 ];
 
@@ -62,6 +68,12 @@ function SurveyContent() {
         relies_on_word_of_mouth: null,
         importance_of_status: 0,
         schedule_tracking_difficult: null,
+        biggest_daily_problem: '',
+        tech_fix_idea: '',
+        desired_features: '',
+        daily_use_motivation: '',
+        privacy_concerns: '',
+        other_suggestions: '',
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -120,10 +132,20 @@ function SurveyContent() {
 
     const handleSubmit = async () => {
         setIsSubmitting(true);
+        const istString = new Date().toLocaleString('en-IN', {
+            timeZone: 'Asia/Kolkata',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
         const finalData = {
             ...formData,
             wants_mobile_app: formData.preferred_platform === 'mobile_app',
-            prefers_digital_notice: formData.preferred_platform === 'digital_notice'
+            prefers_digital_notice: formData.preferred_platform === 'digital_notice',
+            created_at_ist: istString
         };
 
         try {
@@ -224,16 +246,30 @@ function SurveyContent() {
                     {currentStep === 2 && (
                         <QuestionCard key="s2" {...SURVEY_STEPS[1]}>
                             <div className="space-y-12">
-                                <div className="glass p-10 rounded-[2rem] space-y-8 border-white/5">
+                                <div className="glass p-10 rounded-[2rem] space-y-10 border-white/5">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <button onClick={() => updateField('relies_on_word_of_mouth', true)} className={`p-10 rounded-2xl border-2 flex flex-col items-center gap-4 transition-all ${formData.relies_on_word_of_mouth === true ? 'bg-emerald-500/20 border-emerald-500 text-white shadow-xl' : 'bg-white/5 border-transparent text-slate-500'}`}>
+                                        <button
+                                            onClick={() => updateField('relies_on_word_of_mouth', true)}
+                                            className={`p-10 rounded-2xl border-2 flex flex-col items-center gap-4 transition-all ${
+                                                formData.relies_on_word_of_mouth === true
+                                                    ? 'bg-emerald-500/20 border-emerald-500 text-white shadow-xl'
+                                                    : 'bg-white/5 border-transparent text-slate-500'
+                                            }`}
+                                        >
                                             <Users size={32} />
                                             <div className="text-center leading-tight">
                                                 <span className="font-black text-lg block uppercase">Ask Friends</span>
                                                 <span className="text-xs opacity-60 font-medium">Word of Mouth</span>
                                             </div>
                                         </button>
-                                        <button onClick={() => updateField('relies_on_word_of_mouth', false)} className={`p-10 rounded-2xl border-2 flex flex-col items-center gap-4 transition-all ${formData.relies_on_word_of_mouth === false ? 'bg-emerald-500/20 border-emerald-500 text-white shadow-xl' : 'bg-white/5 border-transparent text-slate-500'}`}>
+                                        <button
+                                            onClick={() => updateField('relies_on_word_of_mouth', false)}
+                                            className={`p-10 rounded-2xl border-2 flex flex-col items-center gap-4 transition-all ${
+                                                formData.relies_on_word_of_mouth === false
+                                                    ? 'bg-emerald-500/20 border-emerald-500 text-white shadow-xl'
+                                                    : 'bg-white/5 border-transparent text-slate-500'
+                                            }`}
+                                        >
                                             <Activity size={32} />
                                             <div className="text-center leading-tight">
                                                 <span className="font-black text-lg block uppercase">Go & Check</span>
@@ -241,10 +277,49 @@ function SurveyContent() {
                                             </div>
                                         </button>
                                     </div>
+                                    <div className="pt-6 border-t border-white/5">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div>
+                                                <span className="text-sm font-bold text-white block">
+                                                    Is walking to the cabin a reliable way to find teachers?
+                                                </span>
+                                                <p className="text-xs text-slate-500">
+                                                    Think about how often you find the teacher when you go.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-col sm:flex-row gap-4">
+                                            <button
+                                                onClick={() => updateField('cabin_check_reliable', true)}
+                                                className={`flex-1 py-4 rounded-xl font-black border transition-all ${
+                                                    formData.cabin_check_reliable === true
+                                                        ? 'bg-emerald-500 border-emerald-500 text-white'
+                                                        : 'glass border-white/10 text-slate-500'
+                                                }`}
+                                            >
+                                                YES, USUALLY WORKS
+                                            </button>
+                                            <button
+                                                onClick={() => updateField('cabin_check_reliable', false)}
+                                                className={`flex-1 py-4 rounded-xl font-black border transition-all ${
+                                                    formData.cabin_check_reliable === false
+                                                        ? 'bg-slate-700 border-slate-600 text-white'
+                                                        : 'glass border-white/10 text-slate-500'
+                                                }`}
+                                            >
+                                                NO, MOSTLY FAILS
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <AnimatedButton onClick={prevStep} variant="secondary">Back</AnimatedButton>
-                                    <AnimatedButton onClick={nextStep} disabled={formData.relies_on_word_of_mouth === null}>Next Step →</AnimatedButton>
+                                    <AnimatedButton
+                                        onClick={nextStep}
+                                        disabled={formData.relies_on_word_of_mouth === null || formData.cabin_check_reliable === null}
+                                    >
+                                        Next Step →
+                                    </AnimatedButton>
                                 </div>
                             </div>
                         </QuestionCard>
@@ -258,7 +333,7 @@ function SurveyContent() {
                                     <EmojiRating value={formData.frustration_level} onChange={(val, e) => handleEmojiSelect('frustration_level', val, e)} />
                                 </div>
 
-                                <div className="glass p-10 rounded-[2rem] text-left border-white/5">
+                                <div className="glass p-10 rounded-[2rem] text-left border-white/5 space-y-10">
                                     <div className="flex items-center gap-4 mb-8">
                                         <div className="p-4 rounded-xl bg-slate-500/10 text-slate-400">
                                             <PieChart />
@@ -272,11 +347,44 @@ function SurveyContent() {
                                         <button onClick={() => updateField('schedule_tracking_difficult', true)} className={`flex-1 py-6 rounded-xl font-black border transition-all ${formData.schedule_tracking_difficult === true ? 'bg-emerald-500 border-emerald-500 text-white' : 'glass border-white/10 text-slate-500'}`}>YES, IT'S HARD</button>
                                         <button onClick={() => updateField('schedule_tracking_difficult', false)} className={`flex-1 py-6 rounded-xl font-black border transition-all ${formData.schedule_tracking_difficult === false ? 'bg-emerald-500 border-emerald-500 text-white' : 'glass border-white/10 text-slate-500'}`}>NO, IT'S EASY</button>
                                     </div>
+                                    <div className="pt-6 border-t border-white/5">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div>
+                                                <span className="text-sm font-bold text-white block">How important is it for you to know teacher status?</span>
+                                                <p className="text-xs text-slate-500">1 = Not important, 5 = Extremely important</p>
+                                            </div>
+                                            <span className="text-lg font-black text-emerald-400">{formData.importance_of_status || '-'}</span>
+                                        </div>
+                                        <div className="flex justify-between gap-2">
+                                            {[1, 2, 3, 4, 5].map((level) => (
+                                                <button
+                                                    key={level}
+                                                    onClick={() => updateField('importance_of_status', level)}
+                                                    className={`flex-1 py-3 rounded-xl text-sm font-black border transition-all ${
+                                                        formData.importance_of_status === level
+                                                            ? 'bg-emerald-500 border-emerald-500 text-black'
+                                                            : 'glass border-white/10 text-slate-400'
+                                                    }`}
+                                                >
+                                                    {level}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div className="flex justify-between mt-12">
                                     <AnimatedButton onClick={prevStep} variant="secondary">Back</AnimatedButton>
-                                    <AnimatedButton onClick={nextStep} disabled={formData.frustration_level === 0 || formData.schedule_tracking_difficult === null}>Next Step →</AnimatedButton>
+                                    <AnimatedButton
+                                        onClick={nextStep}
+                                        disabled={
+                                            formData.frustration_level === 0 ||
+                                            formData.schedule_tracking_difficult === null ||
+                                            formData.importance_of_status === 0
+                                        }
+                                    >
+                                        Next Step →
+                                    </AnimatedButton>
                                 </div>
                             </div>
                         </QuestionCard>
@@ -368,9 +476,105 @@ function SurveyContent() {
                                 <div className="flex flex-col md:flex-row justify-between items-center gap-8 mt-16 p-8 rounded-[2rem] border border-white/5 bg-slate-900/40">
                                     <AnimatedButton onClick={prevStep} variant="secondary">Back</AnimatedButton>
                                     <AnimatedButton
-                                        onClick={handleSubmit}
-                                        disabled={!formData.preferred_platform || formData.notification_useful === null || isSubmitting}
+                                        onClick={nextStep}
+                                        disabled={!formData.preferred_platform || formData.notification_useful === null}
                                     >
+                                        Next Step →
+                                    </AnimatedButton>
+                                </div>
+                            </div>
+                        </QuestionCard>
+                    )}
+                    {currentStep === 6 && (
+                        <QuestionCard key="s6" {...SURVEY_STEPS[5]}>
+                            <div className="space-y-10">
+                                <div className="glass p-8 md:p-10 rounded-[2rem] space-y-8 border-white/5">
+                                    <div className="space-y-4">
+                                        <p className="text-slate-400 text-sm md:text-base font-medium">
+                                            This part is all about your ideas. There are no right or wrong answers. Share as much or as little as you like.
+                                        </p>
+                                        <p className="text-slate-500 text-xs font-bold uppercase tracking-[0.25em]">
+                                            Optional but very helpful for our research
+                                        </p>
+                                    </div>
+                                    <div className="space-y-6">
+                                        <div className="space-y-2">
+                                            <label className="block text-xs font-black uppercase tracking-[0.25em] text-slate-400">
+                                                What is the biggest problem you face on campus daily?
+                                            </label>
+                                            <textarea
+                                                value={formData.biggest_daily_problem}
+                                                onChange={(e) => updateField('biggest_daily_problem', e.target.value)}
+                                                className="w-full rounded-2xl bg-black/40 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/60"
+                                                rows={3}
+                                                placeholder="Tell us about the one thing that wastes your time or energy the most."
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="block text-xs font-black uppercase tracking-[0.25em] text-slate-400">
+                                                If you could fix one thing in your college using technology, what would it be?
+                                            </label>
+                                            <textarea
+                                                value={formData.tech_fix_idea}
+                                                onChange={(e) => updateField('tech_fix_idea', e.target.value)}
+                                                className="w-full rounded-2xl bg-black/40 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/60"
+                                                rows={3}
+                                                placeholder="Describe any smart idea or system you wish your college had."
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="block text-xs font-black uppercase tracking-[0.25em] text-slate-400">
+                                                What features would you like us to add to this system?
+                                            </label>
+                                            <textarea
+                                                value={formData.desired_features}
+                                                onChange={(e) => updateField('desired_features', e.target.value)}
+                                                className="w-full rounded-2xl bg-black/40 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/60"
+                                                rows={3}
+                                                placeholder="Notifications, maps, schedules, filters, anything you can think of."
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="block text-xs font-black uppercase tracking-[0.25em] text-slate-400">
+                                                What would make you use this app every day?
+                                            </label>
+                                            <textarea
+                                                value={formData.daily_use_motivation}
+                                                onChange={(e) => updateField('daily_use_motivation', e.target.value)}
+                                                className="w-full rounded-2xl bg-black/40 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/60"
+                                                rows={3}
+                                                placeholder="Think about routines like checking timetable, faculty status, or reminders."
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="block text-xs font-black uppercase tracking-[0.25em] text-slate-400">
+                                                Do you have any privacy concerns about this system?
+                                            </label>
+                                            <textarea
+                                                value={formData.privacy_concerns}
+                                                onChange={(e) => updateField('privacy_concerns', e.target.value)}
+                                                className="w-full rounded-2xl bg-black/40 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/60"
+                                                rows={3}
+                                                placeholder="For example: data sharing, tracking, visibility of your activity, etc."
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="block text-xs font-black uppercase tracking-[0.25em] text-slate-400">
+                                                Any other suggestions or ideas for us?
+                                            </label>
+                                            <textarea
+                                                value={formData.other_suggestions}
+                                                onChange={(e) => updateField('other_suggestions', e.target.value)}
+                                                className="w-full rounded-2xl bg-black/40 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/60"
+                                                rows={3}
+                                                placeholder="Free space for any thoughts, feedback, or creative ideas."
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col md:flex-row justify-between items-center gap-8 mt-4">
+                                    <AnimatedButton onClick={prevStep} variant="secondary">Back</AnimatedButton>
+                                    <AnimatedButton onClick={handleSubmit} disabled={isSubmitting}>
                                         {isSubmitting ? 'Saving...' : 'Finish Survey'}
                                     </AnimatedButton>
                                 </div>

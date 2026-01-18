@@ -13,5 +13,12 @@ CREATE TABLE survey_responses (
   relies_on_word_of_mouth BOOLEAN,
   importance_of_status INTEGER,
   schedule_tracking_difficult BOOLEAN,
-  created_at TIMESTAMP DEFAULT NOW()
+  biggest_daily_problem TEXT,
+  tech_fix_idea TEXT,
+  desired_features TEXT,
+  daily_use_motivation TEXT,
+  privacy_concerns TEXT,
+  other_suggestions TEXT,
+  created_at TIMESTAMP DEFAULT NOW(),
+  created_at_ist TEXT
 );

@@ -121,7 +121,32 @@ export default function AdminDashboard() {
         link.click();
     };
 
+    const getAnalyticsData = () => {
+        const importanceCounts = [1, 2, 3, 4, 5].map(level => ({
+            level: String(level),
+            value: responses.filter(r => r.importance_of_status === level).length
+        }));
+
+        const cabinReliabilityData = [
+            { name: 'Reliable', value: responses.filter(r => r.cabin_check_reliable === true).length },
+            { name: 'Not Reliable', value: responses.filter(r => r.cabin_check_reliable === false).length }
+        ];
+
+        const scheduleDifficultyData = [
+            { name: 'Hard', value: responses.filter(r => r.schedule_tracking_difficult === true).length },
+            { name: 'Easy', value: responses.filter(r => r.schedule_tracking_difficult === false).length }
+        ];
+
+        const wordOfMouthData = [
+            { name: 'Ask Friends', value: responses.filter(r => r.relies_on_word_of_mouth === true).length },
+            { name: 'Go & Check', value: responses.filter(r => r.relies_on_word_of_mouth === false).length }
+        ];
+
+        return { importanceCounts, cabinReliabilityData, scheduleDifficultyData, wordOfMouthData };
+    };
+
     const { timeData, platformData } = getChartData();
+    const { importanceCounts, cabinReliabilityData, scheduleDifficultyData, wordOfMouthData } = getAnalyticsData();
 
     if (!isAuthenticated) return null;
 
@@ -380,6 +405,86 @@ export default function AdminDashboard() {
                                     ))}
                                 </tbody>
                             </table>
+                        </div>
+                    </motion.div>
+                )}
+                {activeTab === 'modeling' && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-10"
+                    >
+                        <div className="lg:col-span-2 glass-card p-12 h-[420px]">
+                            <h3 className="text-xs font-black mb-10 flex items-center gap-4 text-emerald-400 uppercase tracking-[0.4em]">
+                                <BarChart3 size={16} />
+                                Importance Of Status
+                            </h3>
+                            <div className="h-full pb-10">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={importanceCounts}>
+                                        <CartesianGrid strokeDasharray="10 10" stroke="#ffffff05" vertical={false} />
+                                        <XAxis dataKey="level" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 900, fill: '#444' }} />
+                                        <YAxis stroke="#ffffff10" tick={{ fontSize: 10, fontWeight: 900 }} allowDecimals={false} />
+                                        <Tooltip cursor={{ fill: '#ffffff05' }} />
+                                        <Bar dataKey="value" radius={[10, 10, 10, 10]} fill="#00f5a0" />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 gap-10">
+                            <div className="glass-card p-10 h-[200px] flex items-center justify-between">
+                                <div className="space-y-6">
+                                    <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500">Cabin Check Reliability</h4>
+                                    <div className="space-y-3 text-xs font-black uppercase tracking-[0.3em] text-slate-500">
+                                        <div className="flex items-center justify-between gap-4">
+                                            <span className="text-white">Reliable</span>
+                                            <span className="text-emerald-400">{cabinReliabilityData[0].value}</span>
+                                        </div>
+                                        <div className="flex items-center justify-between gap-4">
+                                            <span className="text-white">Not Reliable</span>
+                                            <span className="text-cyan-400">{cabinReliabilityData[1].value}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="w-28 h-28">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <PieChart>
+                                            <Pie
+                                                data={cabinReliabilityData}
+                                                innerRadius={38}
+                                                outerRadius={54}
+                                                paddingAngle={6}
+                                                dataKey="value"
+                                                stroke="none"
+                                            >
+                                                <Cell fill="#00f5a0" />
+                                                <Cell fill="#00d9ff" />
+                                            </Pie>
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </div>
+                            <div className="glass-card p-10 h-[200px] flex flex-col justify-between">
+                                <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500 mb-4">Search Behaviour</h4>
+                                <div className="space-y-4 text-xs font-black uppercase tracking-[0.3em] text-slate-500">
+                                    <div className="flex items-center justify-between gap-4">
+                                        <span className="text-white">Schedule Hard</span>
+                                        <span className="text-emerald-400">{scheduleDifficultyData[0].value}</span>
+                                    </div>
+                                    <div className="flex items-center justify-between gap-4">
+                                        <span className="text-white">Schedule Easy</span>
+                                        <span className="text-cyan-400">{scheduleDifficultyData[1].value}</span>
+                                    </div>
+                                    <div className="flex items-center justify-between gap-4 pt-2 border-t border-white/5">
+                                        <span className="text-white">Ask Friends</span>
+                                        <span className="text-emerald-400">{wordOfMouthData[0].value}</span>
+                                    </div>
+                                    <div className="flex items-center justify-between gap-4">
+                                        <span className="text-white">Go & Check</span>
+                                        <span className="text-cyan-400">{wordOfMouthData[1].value}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </motion.div>
                 )}
